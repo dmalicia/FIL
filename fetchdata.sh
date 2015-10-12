@@ -107,6 +107,16 @@ function mem_info(){
 	pause
 }
 
+function collect_logs(){
+#	rm -rf /tmp/fil
+#	mkdir -p /tmp/fil
+	find /var/log -name "*.log" | while read line
+		do
+       logname=$(sed 's|\/|\_|g' <<< $line)
+	echo $logname
+	cp -r $line /tmp/fil/$logname 
+	done
+}
  
 # ignore CTRL+C, CTRL+Z and quit singles using the trap
 #trap '' SIGINT SIGQUIT SIGTSTP
@@ -123,7 +133,8 @@ function mem_info(){
                 net_info 
                 user_info "who" 
                 user_info "last" 
-                mem_info 
+                mem_info
+		collect_logs 
                 echo "Bye!"; exit 0 
 
 
